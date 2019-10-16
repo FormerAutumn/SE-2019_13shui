@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[4]:
 
 
 import numpy as np
 from simple import *
 
 
-# In[2]:
+# In[5]:
 
 
 hyper_n = 5
@@ -18,7 +18,7 @@ suit_sa = { '#':0, '*':1 , '&':2, '$':3 }
 number_sa = { 'A':14, '1':1, '2':2, '3':3, '4':4, '5':5, '6':6, '7':7, '8':8, '9':9, '10':10, 'J':11, 'Q':12, 'K':13 }
 
 
-# In[3]:
+# In[6]:
 
 
 junk = [
@@ -92,7 +92,7 @@ royal_flush = [
 ]
 
 
-# In[4]:
+# In[7]:
 
 
 #mode = 0(header) 1(middle) 2(last)
@@ -127,7 +127,7 @@ def get_weight( card_list, mode ):
     ret = jdg_flush(nw_cards)
     #print("wutong:", ret)
     if ( ret != -1 ):
-        return wutong[mode][ret[0][1]-1]
+        return flush[mode][ret-1]
     
     #straight
     ret = jdg_straight(nw_cards)
@@ -139,7 +139,7 @@ def get_weight( card_list, mode ):
     ret = jdg_triple(nw_cards)
     #print("triple:", ret)
     if ( ret != -1 ):
-        mx = triple[mode][ret[0][1]-1]
+        mx = triple[mode][ret-1]
         for i in nw_cards:
             if ( i[1] != triple[0][1] ):
                 mx = max( mx, junk[mode][i[1]-1] )
@@ -173,7 +173,7 @@ def get_weight( card_list, mode ):
     return mx
 
 
-# In[5]:
+# In[8]:
 
 
 system_cards =  "$4 &7 #8 *3 &8 #10 #K *6 #2 $Q $3 $K *J"
@@ -189,7 +189,7 @@ tp.sort(key=lambda x:x[1])
 print(tp)
 
 
-# In[6]:
+# In[9]:
 
 
 header = [(0, 13), (3, 12), (3, 13)]
@@ -198,7 +198,7 @@ last = [(3, 4), (2, 7), (0, 8), (1, 3), (0, 2)]
 print(header); print(middle); print(last)
 
 
-# In[7]:
+# In[10]:
 
 
 #同花顺 > 炸弹 > 葫芦 > 同花 > 顺子 > 三条 > 二对 > 一对 > 散牌
