@@ -102,8 +102,7 @@ def jdg_straight( card_list ):
     for i in card_list:
         ct[i[0]] += 1
         cards.append(i[1])
-        if i == 1:
-            return (0,0)
+        
     th_flg = 0
     if ct[card_list[0][0]] == len(card_list):
         th_flg = 1
