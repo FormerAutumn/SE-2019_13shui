@@ -6,6 +6,7 @@
 
 ## 代码质量评分及徽章（要求达到A）
 ![](https://img.shields.io/badge/code%20quality-A-bright)
+
 ## 运行环境
 Windows10/Win7
 
