@@ -97,6 +97,8 @@ def jdg_boom( card_list ):
 
 
 def jdg_straight( card_list ):
+    if ( len(card_list) < 5 ) :
+        return (0,0,0)
     ct = np.zeros(4)
     cards = []
     for i in card_list:
@@ -110,7 +112,7 @@ def jdg_straight( card_list ):
     for i in range(0,len(cards)-1,1):
         if (cards[i]+1 != cards[i+1]):
             return (th_flg,0,0)
-    return (th_flg,1,cards[0])
+    return (th_flg,1,np.array(cards).max())
 
 
 # In[2]:
