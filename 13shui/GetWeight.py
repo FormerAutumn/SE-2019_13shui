@@ -92,7 +92,7 @@ royal_flush = [
 ]
 
 
-# In[8]:
+# In[4]:
 
 
 #mode = 0(header) 1(middle) 2(last)
@@ -121,7 +121,7 @@ def get_weight( card_list, mode ):
     ret = jdg_fullhouse(nw_cards)
     #print("hulu:", ret)
     if ( ret != -1 ):
-        return max(full_house[mode][ret[0][0][1]-1], full_house[mode][ret[1][0][1]-1])
+        return max(full_house[mode][ret[0]-1], full_house[mode][ret[1]-1])
 
     #wutong
     ret = jdg_flush(nw_cards)
@@ -173,7 +173,7 @@ def get_weight( card_list, mode ):
     return mx
 
 
-# In[9]:
+# In[5]:
 
 
 system_cards =  "$4 &7 #8 *3 &8 #10 #K *6 #2 $Q $3 $K *J"
@@ -189,7 +189,7 @@ tp.sort(key=lambda x:x[1])
 print(tp)
 
 
-# In[10]:
+# In[6]:
 
 
 header = [(0, 13), (3, 12), (3, 13)]
@@ -198,25 +198,18 @@ last = [(3, 4), (2, 7), (0, 8), (1, 3), (0, 2)]
 print(header); print(middle); print(last)
 
 
-# In[11]:
+# In[7]:
 
 
 #同花顺 > 炸弹 > 葫芦 > 同花 > 顺子 > 三条 > 二对 > 一对 > 散牌
 
 
-# In[12]:
+# In[8]:
 
 
 print(get_weight(header,0))
 print(get_weight(middle,1))
 print(get_weight(last,2))
-
-
-# In[16]:
-
-
-hh = [(3, 4), (0, 8), (1, 3), (2, 8), (3, 3)]
-print(get_weight(hh,2))
 
 
 # In[ ]:
