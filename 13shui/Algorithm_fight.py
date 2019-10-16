@@ -31,7 +31,6 @@ def chg(x):
 
 # In[17]:
 
-
 class Hands():
     def __init__(self, card_sublist, weight):
         self.list = card_sublist.copy()
