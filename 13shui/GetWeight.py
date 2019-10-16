@@ -98,7 +98,7 @@ royal_flush = [
 #mode = 0(header) 1(middle) 2(last)
 def get_weight( card_list, mode ):
     nw_cards = card_list.copy()
-    #sz = len(card_list)
+    sz = len(card_list)
     #straight_flush
     ret = jdg_straight(nw_cards) #(flush, straight, first_number)
     #print("starigh:", ret)
@@ -133,7 +133,7 @@ def get_weight( card_list, mode ):
     ret = jdg_straight(nw_cards)
     #print("starigh:", ret)
     if ( ret[1] != 0 ):
-        return straight[mode][ret[2]-1+len(nw_cards)]
+        return straight[mode][ret[2]]
 
     #triple
     ret = jdg_triple(nw_cards)
