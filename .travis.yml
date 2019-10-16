@@ -1,3 +1,4 @@
 language: python
 sudo: required
-script: test.py
+script:
+- python test.py
