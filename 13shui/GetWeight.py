@@ -147,8 +147,7 @@ def get_weight( card_list, mode ):
             if ( i[1] != ret[0] and i[1] != ret[1] ):
                 sm += junk[mode][i[1]-1]
                 break
-        return sm/sz
-    
+        return sm/sz 
     #pair
     ret = jdg_pair(nw_cards)
     if ( ret != -1 ):
