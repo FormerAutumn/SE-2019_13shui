@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[101]:
+# In[1]:
 
 
 import numpy as np
@@ -12,7 +12,7 @@ from simple import *
 from GetWeight import *
 
 
-# In[118]:
+# In[2]:
 
 
 # #方块 *草花 &红心 $黑桃
@@ -95,7 +95,7 @@ def chg(x):
     return nw[x]
 
 
-# In[103]:
+# In[3]:
 
 
 class HandCard():
@@ -106,7 +106,7 @@ class HandCard():
         return self.weight <= a.weight
 
 
-# In[122]:
+# In[4]:
 
 
 def jdg_ordered(card_list, mode):
@@ -182,7 +182,7 @@ def jdg_ordered(card_list, mode):
     return (ned[9], np.array(nw_cards).max(), sm/sz)
 
 
-# In[115]:
+# In[5]:
 
 
 ##同花顺(18) > 炸弹(17) > 葫芦(16) > 同花(15) > 顺子(14) > 三条(12) > 二对(11) > 一对(10) > 散牌(9)
@@ -202,20 +202,20 @@ def chk_ordered(st, nd, rd):
         return (1, (np.array([retst[2], retnd[2], retrd[2]])*np.array([0.2, 0.3, 0.5])).sum())
 
 
-# In[104]:
+# In[102]:
 
 
 def get_battle():
     import http.client
     conn = http.client.HTTPSConnection("api.shisanshui.rtxux.xyz")
-    headers = { 'x-auth-token': "41bb4289-5015-44f7-afd5-c03bf9ccbc91" }
+    headers = { 'x-auth-token': "b1d7d1b0-0512-42c9-9c08-b718228fb5ec" }
     conn.request("POST", "/game/open", headers=headers)
     res = conn.getresponse()
     data = res.read()
     return data
 
 
-# In[105]:
+# In[92]:
 
 
 def decode_data(data):
@@ -223,12 +223,11 @@ def decode_data(data):
     #print(data_dict)
     system_cards = data_dict["data"]["card"]
     nw_id = data_dict["data"]["id"]
-    #print(system_cards)
-    #print(nw_id)
+    #print(system_cards, nw_id)
     return (nw_id, system_cards)
 
 
-# In[106]:
+# In[103]:
 
 
 def send_2_system( card_set ):
@@ -237,7 +236,7 @@ def send_2_system( card_set ):
     payload = json.dumps(card_set)#"{\"id\":1000,\"card\":[\"*2 *3 *4\",\"*5 *6 *7 *8 *9\",\"*10 *J *Q *K *A\"]}"
     headers = {
         'content-type': "application/json",
-        'x-auth-token': "41bb4289-5015-44f7-afd5-c03bf9ccbc91"
+        'x-auth-token': "b1d7d1b0-0512-42c9-9c08-b718228fb5ec"
     }
     conn.request("POST", "/game/submit", payload, headers)
     res = conn.getresponse()
@@ -245,7 +244,7 @@ def send_2_system( card_set ):
     print(data.decode("utf-8"))
 
 
-# In[107]:
+# In[80]:
 
 
 def pattern_search(cards):
@@ -352,7 +351,7 @@ def pattern_search(cards):
     return junks, pairs, triples, booms, straights, flushs, _2_pairs, _32_tps
 
 
-# In[116]:
+# In[89]:
 
 
 #同花顺 > 炸弹 > 葫芦 > 同花 > 顺子 > 三条 > 二对 > 一对 > 散牌
@@ -362,10 +361,10 @@ def AutoRecommend(tp_cards, junks, pairs, triples, booms, straights, flushs, _2_
     _first  = triples + pairs + junks
     nw_cards = tp_cards.copy()
     nw_cards.sort(key=lambda x:-x[1])
-    #print(nw_cards)
+    #print("nw_cards = ", nw_cards)
     q = []
     hyper_n = 20
-    my_weight = [0.2, 0.3, 0.5]
+    my_weight = [1/3, 1/3, 1/3]
     heapq.heapify(q)
 
     for i in _third:
@@ -380,10 +379,11 @@ def AutoRecommend(tp_cards, junks, pairs, triples, booms, straights, flushs, _2_
     
         tp_nwcs0 = nwcs.copy()
         #print("nwcs after ii ", nwcs)
-    
+        tp_tail = tail.copy()
         for j in _second:
             nwcs = tp_nwcs0.copy()
             #print("j = ",j)
+            tail = tp_tail.copy()
             mid = j.copy()
             flg = 1
             for jj in mid:
@@ -396,10 +396,14 @@ def AutoRecommend(tp_cards, junks, pairs, triples, booms, straights, flushs, _2_
                 continue
             
             tp_nwcs1 = nwcs.copy()
+            #print("nwcs = ", nwcs)
             #print("nwcs after jj ", nwcs)
+            tp_mid = mid.copy()
             for k in _first:
                 nwcs = tp_nwcs1.copy()
                 #print("k = ",k)
+                tail = tp_tail.copy()
+                mid = tp_mid.copy()
                 head = k.copy()
                 flg = 1
                 for kk in head:
@@ -414,20 +418,29 @@ def AutoRecommend(tp_cards, junks, pairs, triples, booms, straights, flushs, _2_
                 #print("nwcs the rest ", nwcs)
                 #print("nw_cards_0 = ", head, mid, tail)
                 #complete the head
+
+                #print(head); print(mid); print(tail)
+                
+                tpp = nw_cards.copy()
+                #print("tpp = ", tpp)
+                for hd in head:
+                    tpp.remove(hd)
+                for mi in mid:
+                    tpp.remove(mi)
+                for tl in tail:
+                    tpp.remove(tl)
+                
                 pos = 0
-                while ( (len(head) < 3) and (pos < len(nwcs)) ):
-                    head += [nwcs[pos]]
-                    pos += 1
-            
-                #complete the mid
-                while ( (len(mid) < 5) and (pos < len(nwcs)) ):
-                    mid += [nwcs[pos]]
-                    pos += 1
-            
-                #complete the last
-                while ( (len(tail) < 5) and (pos < len(nwcs)) ):
-                    tail += [nwcs[pos]]
-                    pos += 1
+                while ( pos < len(tpp) ):
+                    if ( len(head) < 3 and pos < len(tpp) ):
+                        head.append(tpp[pos])
+                        pos += 1
+                    if ( len(mid) < 5 and pos < len(tpp) ):
+                        mid.append(tpp[pos])
+                        pos += 1
+                    if ( len(tail) < 5 and pos < len(tpp) ):
+                        tail.append(tpp[pos])
+                        pos += 1
             
                 w_h, w_m, w_t = get_weight(head,0), get_weight(mid,1), get_weight(tail,2)
                 nw_w = (np.array([w_h,w_m,w_t])*np.array(my_weight)).sum()
@@ -447,7 +460,7 @@ def AutoRecommend(tp_cards, junks, pairs, triples, booms, straights, flushs, _2_
     return ret
 
 
-# In[109]:
+# In[11]:
 
 
 def _start():
@@ -471,13 +484,16 @@ def _start():
     send_2_system(send_cards_set)
 
 
-# In[123]:
+# In[104]:
 
 
-T = 32
+import time
+T = 10
 while ( T ):
+    start = time.time()
     _start()
     T -= 1
+    print("time: %.2f secs" % (time.time()-start))
 
 
 # In[ ]:
