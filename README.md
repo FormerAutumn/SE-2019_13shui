@@ -11,7 +11,7 @@ Windows10/Win7
 exe可执行文件，无需编译
 
 ## 使用方法
-进入百度云盘页面：[https://pan.baidu.com/s/1BKXBdohykmFhDD5POoB0Wg](https://pan.baidu.com/s/1BKXBdohykmFhDD5POoB0Wg) 下载，提取码: riyf  
+进入百度云盘页面：[https://pan.baidu.com/s/1ont8Mf5WHFnzY66u8NZxEQ](https://pan.baidu.com/s/1ont8Mf5WHFnzY66u8NZxEQ) 下载，提取码: wtt4  
 因使用pyinstaller打包生成的exe文件过大无法上传GitHub，故选择使用百度云上传
 
 ## 持续集成
