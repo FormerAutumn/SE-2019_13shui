@@ -92,82 +92,91 @@ royal_flush = [
 ]
 
 
-# In[9]:
+# In[8]:
 
 
 #mode = 0(header) 1(middle) 2(last)
 def get_weight( card_list, mode ):
     nw_cards = card_list.copy()
-    sz = len(card_list)
+    #sz = len(card_list)
     #straight_flush
     ret = jdg_straight(nw_cards) #(flush, straight, first_number)
+    #print("starigh:", ret)
     if ( ret[0] and ret[1] ):
-        sm = 0.0
+        mx = 0
         for i in range(len(straight_flush[mode])):
             for j in card_list:
                 if j[1]-1 == i:
-                    sm += straight_flush[mode][i]
+                    mx = max( mx, straight_flush[mode][i] )
                     break
-        return sm/sz
+        return mx
     
     #boom
     ret = jdg_boom(nw_cards)
+    #print("boom:", ret)
     if ( ret != -1 ):
         return four_of_a_kind[mode][ret[0][1]-1]
     
     #hulu
     ret = jdg_fullhouse(nw_cards)
+    #print("hulu:", ret)
     if ( ret != -1 ):
-        return (full_house[mode][ret[0]-1] + full_house[mode][ret[1]-1])/sz
+        return max(full_house[mode][ret[0][0][1]-1], full_house[mode][ret[1][0][1]-1])
 
-    #flush
+    #wutong
     ret = jdg_flush(nw_cards)
+    #print("wutong:", ret)
     if ( ret != -1 ):
-        return flush[mode][ret[0][1]-1]
+        return wutong[mode][ret[0][1]-1]
     
     #straight
     ret = jdg_straight(nw_cards)
+    #print("starigh:", ret)
     if ( ret[1] != 0 ):
-        return np.array(straight[mode][ret[2]-1:ret[2]-1+sz]).sum()/sz
+        return straight[mode][ret[2]-1+sz]
 
     #triple
     ret = jdg_triple(nw_cards)
+    #print("triple:", ret)
     if ( ret != -1 ):
-        sm = triple[mode][ret-1]*3
+        mx = triple[mode][ret[0][1]-1]
         for i in nw_cards:
-            if ( i[1] != ret ):
-                sm += junk[mode][i[1]-1]
-        return sm/sz
+            if ( i[1] != triple[0][1] ):
+                mx = max( mx, junk[mode][i[1]-1] )
+        return mx
     
     #2 pairs
     ret = jdg_2pairs(nw_cards)
+    #print("2 pairs:", ret)
     if ( ret != -1 ):
-        sm = two_pair[mode][ret[0]-1]*2 + two_pair[mode][ret[1]-1]*2
+        mx = max( two_pair[mode][ret[0]-1], two_pair[mode][ret[1]-1] )
         for i in nw_cards:
             if ( i[1] != ret[0] and i[1] != ret[1] ):
-                sm += junk[mode][i[1]-1]
+                mx = max( mx, junk[mode][i[1]-1] )
                 break
-        return sm/sz 
+        return mx
+    
     #pair
     ret = jdg_pair(nw_cards)
+    #print("apir:", ret)
     if ( ret != -1 ):
-        sm = one_pair[mode][ret-1]*2
+        mx = one_pair[mode][ret-1]
         for i in nw_cards:
             if ( i[1] != ret ):
-                sm += junk[mode][i[1]-1]
-        return sm/sz
+                mx = max( mx, junk[mode][i[1]-1] )
+        return mx
 
     #junk
-    sm = 0.0
+    mx = 0
     for i in nw_cards:
-        sm += junk[mode][i[1]-1]
-    return sm/sz
+        mx = max( mx, junk[mode][i[1]-1] )
+    return mx
 
 
-# In[5]:
+# In[9]:
 
-"""
-system_cards =  "*2 *3 *4 *5 *6 *7 *8 *9 *10 *J *Q *K *A"
+
+system_cards =  "$4 &7 #8 *3 &8 #10 #K *6 #2 $Q $3 $K *J"
 system_cards = system_cards.split()
 print(system_cards)
 _cards = []
@@ -175,30 +184,40 @@ for i in system_cards:
     x, y = suit_sa[i[0]], number_sa[i[1:len(i)]]
     _cards.append((x,y))
 print(_cards)
-"""
-
-# In[6]:
-
-"""
-header = _cards[:3]
-middle = _cards[3:8]
-last = _cards[8:13]
-print(header); print(middle); print(last)
-
-
-# In[7]:
-
-
-#同花顺 > 炸弹 > 葫芦 > 同花 > 顺子 > 三条 > 二对 > 一对 > 散牌
+tp = _cards.copy()
+tp.sort(key=lambda x:x[1])
+print(tp)
 
 
 # In[10]:
 
 
+header = [(0, 13), (3, 12), (3, 13)]
+middle = [(2, 8), (0, 10), (1, 6), (3, 3), (1, 11)]
+last = [(3, 4), (2, 7), (0, 8), (1, 3), (0, 2)]
+print(header); print(middle); print(last)
+
+
+# In[11]:
+
+
+#同花顺 > 炸弹 > 葫芦 > 同花 > 顺子 > 三条 > 二对 > 一对 > 散牌
+
+
+# In[12]:
+
+
 print(get_weight(header,0))
 print(get_weight(middle,1))
 print(get_weight(last,2))
-"""
+
+
+# In[16]:
+
+
+hh = [(3, 4), (0, 8), (1, 3), (2, 8), (3, 3)]
+print(get_weight(hh,2))
+
 
 # In[ ]:
 
