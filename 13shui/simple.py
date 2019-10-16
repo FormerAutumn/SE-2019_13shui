@@ -20,7 +20,6 @@ class Card():
         return self.suit
     def get_number(self):
         return self.number
-    
     def ToDict(self):
         return {'suit':self.suit, 'number':self.number}
 
