@@ -119,13 +119,13 @@ def jdg_ordered(card_list, mode):
     #straight_flush
     ret = jdg_straight(nw_cards) #(flush, straight, first_number)
     if ( ret[0] and ret[1] ):
-        sm = 0.0
+        mx = 0
         for i in range(len(straight_flush[mode])):
             for j in card_list:
                 if j[1]-1 == i:
-                    sm += straight_flush[mode][i]
+                    mx = max(mx, straight_flush[mode][i])
                     break
-        return (ned[18], ret[2], sm/sz)
+        return (ned[18], ret[2], mx)
     
     #boom
     ret = jdg_boom(nw_cards)
@@ -135,7 +135,7 @@ def jdg_ordered(card_list, mode):
     #hulu
     ret = jdg_fullhouse(nw_cards)
     if ( ret != -1 ):
-        return (ned[16], ret[0], full_house[mode][ret[0]-1] + full_house[mode][ret[1]-1]/sz)
+        return (ned[16], ret[0], max(full_house[mode][ret[0]-1], full_house[mode][ret[1]-1]) )
 
     #flush
     ret = jdg_flush(nw_cards)
@@ -145,89 +145,91 @@ def jdg_ordered(card_list, mode):
     #straight
     ret = jdg_straight(nw_cards)
     if ( ret[1] != 0 ):
-        return (ned[14], ret[2], np.array(straight[mode][ret[2]-1:ret[2]-1+sz]).sum()/sz)
+        return (ned[14], ret[2], straight[mode][ret[2]-1])
 
     #triple
     ret = jdg_triple(nw_cards)
     if ( ret != -1 ):
-        sm = triple[mode][ret-1]*3
+        mx = triple[mode][ret-1]
         for i in nw_cards:
             if ( i[1] != ret ):
-                sm += junk[mode][i[1]-1]
-        return (ned[12], ret, sm/sz)
+                mx = max(mx, junk[mode][i[1]-1])
+        return (ned[12], ret, mx)
     
     #2 pairs
     ret = jdg_2pairs(nw_cards)
     if ( ret != -1 ):
-        sm = two_pair[mode][ret[0]-1]*2 + two_pair[mode][ret[1]-1]*2
+        mx = max( two_pair[mode][ret[0]-1], two_pair[mode][ret[1]-1] )
+        if ( ret[0]+1 == ret[1] ):
+            pp = ned[10]
+        else:
+            pp = 0
         for i in nw_cards:
             if ( i[1] != ret[0] and i[1] != ret[1] ):
-                sm += junk[mode][i[1]-1]
+                mx = max(mx, junk[mode][i[1]-1])
                 break
-        return (ned[11], ret[1], sm/sz)
+        return (ned[11]+pp, ret[1], mx)
     
     #pair
     ret = jdg_pair(nw_cards)
     if ( ret != -1 ):
-        sm = one_pair[mode][ret-1]*2
+        mx = one_pair[mode][ret-1]
         for i in nw_cards:
             if ( i[1] != ret ):
-                sm += junk[mode][i[1]-1]
-        return (ned[10], ret, sm/sz)
+                mx = max(mx, junk[mode][i[1]-1])
+        return (ned[10], ret, mx)
 
     #junk
-    sm = 0.0
+    mx = 0
     for i in nw_cards:
-        sm += junk[mode][i[1]-1]
-    return (ned[9], np.array(nw_cards).max(), sm/sz)
+        mx = max(mx, junk[mode][i[1]-1])
+    return (ned[9], np.array(nw_cards).max(), mx)
 
 
-# In[5]:
+# In[20]:
 
 
 ##同花顺(18) > 炸弹(17) > 葫芦(16) > 同花(15) > 顺子(14) > 三条(12) > 二对(11) > 一对(10) > 散牌(9)
 def chk_ordered(st, nd, rd):
+    my_weight = [1/3, 1/3, 1/3]
     retst = jdg_ordered(st, 0)
     retnd = jdg_ordered(nd, 1)
     retrd = jdg_ordered(rd, 2)
     if ( (retst[0] > retnd[0]) or (retst[0] > retrd[0]) or (retnd[0] > retrd[0]) ):
         return (0,0)
-    elif ( (retst[0]==retnd[0] and retst[1] > retnd[1]) ):
+    if ( (retst[0]==retnd[0]) and (retst[1] >= retnd[1]) ):
         return (0,0)
-    elif ( (retst[0]==retrd[0] and retst[1] > retrd[1]) ):
+    if ( (retst[0]==retrd[0]) and (retst[1] >= retrd[1]) ):
         return (0,0)
-    elif ( (retnd[0]==retrd[0] and retnd[1] > retrd[1]) ):
+    if ( (retnd[0]==retrd[0]) and (retnd[1] >= retrd[1]) ):
         return (0,0)
-    else:
-        return (1, (np.array([retst[2], retnd[2], retrd[2]])*np.array([0.2, 0.3, 0.5])).sum())
+    return (1, (np.array([retst[2], retnd[2], retrd[2]])*np.array(my_weight)).sum())
 
 
-# In[102]:
+# In[6]:
 
 
 def get_battle():
-    import http.client
-    conn = http.client.HTTPSConnection("api.shisanshui.rtxux.xyz")
-    headers = { 'x-auth-token': "b1d7d1b0-0512-42c9-9c08-b718228fb5ec" }
-    conn.request("POST", "/game/open", headers=headers)
-    res = conn.getresponse()
-    data = res.read()
-    return data
+    import requests
+    url = "https://api.shisanshui.rtxux.xyz/game/open"
+    headers = {'x-auth-token': '644e81ec-9b9f-4477-847a-ac3cb9f6fa21'}
+    response = requests.request("POST", url, headers=headers)
+    return response.text
 
 
-# In[92]:
+# In[7]:
 
 
 def decode_data(data):
-    data_dict = json.loads(get_battle().decode('utf-8'))
+    data_dict = json.loads(data)
     #print(data_dict)
     system_cards = data_dict["data"]["card"]
     nw_id = data_dict["data"]["id"]
-    #print(system_cards, nw_id)
+    print(system_cards)
     return (nw_id, system_cards)
 
 
-# In[103]:
+# In[8]:
 
 
 def send_2_system( card_set ):
@@ -236,7 +238,7 @@ def send_2_system( card_set ):
     payload = json.dumps(card_set)#"{\"id\":1000,\"card\":[\"*2 *3 *4\",\"*5 *6 *7 *8 *9\",\"*10 *J *Q *K *A\"]}"
     headers = {
         'content-type': "application/json",
-        'x-auth-token': "b1d7d1b0-0512-42c9-9c08-b718228fb5ec"
+        'x-auth-token': "644e81ec-9b9f-4477-847a-ac3cb9f6fa21"
     }
     conn.request("POST", "/game/submit", payload, headers)
     res = conn.getresponse()
@@ -244,7 +246,7 @@ def send_2_system( card_set ):
     print(data.decode("utf-8"))
 
 
-# In[80]:
+# In[9]:
 
 
 def pattern_search(cards):
@@ -332,11 +334,15 @@ def pattern_search(cards):
     #print(ct)
 
     #type [[(x,y),..,()],[(),..,()]]
-    _2_pairs = []
+    _2_pairs = []; tp_2_pairs = []
     for i in range(len(pairs)):
         for j in range(i+1,len(pairs)):
             a, b, c, d = pairs[i][0], pairs[i][1], pairs[j][0], pairs[j][1]
-            _2_pairs.append([a,b,c,d])
+            if ( b[1]-1 == c[1] ):
+                _2_pairs.append([a,b,c,d])
+            else:
+                tp_2_pairs.append([a,b,c,d])
+    _2_pairs += tp_2_pairs
 
     _32_tps = []
     for i in range(len(triples)):
@@ -351,7 +357,7 @@ def pattern_search(cards):
     return junks, pairs, triples, booms, straights, flushs, _2_pairs, _32_tps
 
 
-# In[89]:
+# In[10]:
 
 
 #同花顺 > 炸弹 > 葫芦 > 同花 > 顺子 > 三条 > 二对 > 一对 > 散牌
@@ -465,30 +471,31 @@ def AutoRecommend(tp_cards, junks, pairs, triples, booms, straights, flushs, _2_
 
 def _start():
     data = get_battle()
-    decoded_data = decode_data(data)
-    system_cards = decoded_data[1].split()
-    nw_id = decoded_data[0]
-    #print(system_cards)
-    _cards = []
-    for i in system_cards:
-        x, y = suit_sa[i[0]], number_sa[i[1:len(i)]]
-        _cards.append((x,y))
-    #print(_cards)
-    junks, pairs, triples, booms, straights, flushs, _2_pairs, _32_tps = pattern_search(_cards)
-    cards_set = AutoRecommend( _cards,junks, pairs, triples, booms, straights, flushs, _2_pairs, _32_tps)
-    encode_cards = []
-    for x, y in cards_set:
-        encode_cards.append(suit[x]+chg(y))
-    send_cards_set = {"id":nw_id, "card":[' '.join(encode_cards[:3]), ' '.join(encode_cards[3:8]), ' '.join(encode_cards[8:13])]}
-    print(send_cards_set)
-    send_2_system(send_cards_set)
+    if ( data ):
+        decoded_data = decode_data(data)
+        system_cards = decoded_data[1].split()
+        nw_id = decoded_data[0]
+        #print(system_cards)
+        _cards = []
+        for i in system_cards:
+            x, y = suit_sa[i[0]], number_sa[i[1:len(i)]]
+            _cards.append((x,y))
+        #print(_cards)
+        junks, pairs, triples, booms, straights, flushs, _2_pairs, _32_tps = pattern_search(_cards)
+        cards_set = AutoRecommend( _cards,junks, pairs, triples, booms, straights, flushs, _2_pairs, _32_tps)
+        encode_cards = []
+        for x, y in cards_set:
+            encode_cards.append(suit[x]+chg(y))
+        send_cards_set = {"id":nw_id, "card":[' '.join(encode_cards[:3]), ' '.join(encode_cards[3:8]), ' '.join(encode_cards[8:13])]}
+        print(send_cards_set)
+        send_2_system(send_cards_set)
 
 
-# In[104]:
+# In[21]:
 
 
 import time
-T = 10
+T = 100
 while ( T ):
     start = time.time()
     _start()
