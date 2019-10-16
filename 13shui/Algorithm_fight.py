@@ -4,12 +4,10 @@
 # In[14]:
 
 
-import numpy as np
 import heapq
 from simple import *
 from special import *
 from GetWeight import *
-import requests
 import json
 
 
@@ -127,16 +125,9 @@ def RecommendHands( card_list ):
             my_hands.append(  [(header_hands[j].list, header_hands[j].weight),
                                (middle_hands[j].list, middle_hands[j].weight),
                                (lst.list, lst.weight)] ) 
-    #for i in my_hands:
-    #   print(i)
-    
     return my_hands
-    
     #middle O(n^5) using the brute force to enumrate the combination of the middle hands 
     #first the rest, no choise to choose
-
-
-# In[26]:
 
 
 def get_battle():
@@ -211,7 +202,6 @@ def send_2_system( card_set ):
     }
     conn.request("POST", "/game/submit", payload, headers)
     res = conn.getresponse()
-    data = res.read()
     #print(data.decode("utf-8"))
 
 
