@@ -106,7 +106,7 @@ def jdg_straight( card_list ):
     th_flg = 0
     if ct[card_list[0][0]] == len(card_list):
         th_flg = 1
-    cards.sort(key=lambda x:x[1])
+    cards.sort()
     for i in range(0,len(cards)-1,1):
         if (cards[i]+1 != cards[i+1]):
             return (th_flg,0,0)
