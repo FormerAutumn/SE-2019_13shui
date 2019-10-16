@@ -133,7 +133,7 @@ def get_weight( card_list, mode ):
     ret = jdg_straight(nw_cards)
     #print("starigh:", ret)
     if ( ret[1] != 0 ):
-        return straight[mode][ret[2]]
+        return straight[mode][ret[2]-1]
 
     #triple
     ret = jdg_triple(nw_cards)
