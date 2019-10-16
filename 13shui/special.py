@@ -290,6 +290,3 @@ def ZhiZhunQingLong():
     else:
         return 0
 
-"""print("CouYiSe()=",CouYiSe(),"\nLiuDuiBan()=",LiuDuiBan(),"\nQuanDa()=",QuanDa(),"\nQuanXiao()=",QuanXiao(),"\nSanShunZi()=",SanShunZi(),
-      "\nSanTongHua()=",SanTongHua(),"\nSanTongHuaShun()=",SanTongHuaShun(),"\nSanZhaDan()=",SanZhaDan(),"\nShiErHuangZu()=",ShiErHuangZu(),"\nSiTaoSanTiao()=",SiTaoSanTiao(),
-      "\nShuangGuaiChongSan=",ShuangGuaiChongSan(),"\nWuDuiChongSan()=",WuDuiChongSan(),"\nYiTiaoLong()=",YiTiaoLong(),"\nZhiZhunQingLong()=",ZhiZhunQingLong())"""
