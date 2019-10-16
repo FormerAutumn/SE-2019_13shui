@@ -54,8 +54,6 @@ def getSanList(numList):
     for num1 in numList:
         num2 = num1 + 1
         num3 = num1 + 2
-        ''' if num1 == 12:
-            num3 = 1'''
         if num2 in numList and num3 in numList:
             san = []
             san.append(num1)
@@ -72,10 +70,7 @@ def isWuShun(nList):
         num3 = num1 + 2
         num4 = num1 + 3
         num5 = num1 + 4
-        '''if num2==1:
-            continue
-        if num1 == 10:
-            num5 = 1'''
+
         if num2 in nList and num3 in nList and num4 in nList and num5 in nList:
             tmpList = []
             tmpList.append(num1)
@@ -295,10 +290,3 @@ def ZhiZhunQingLong():
     else:
         return 0
 
-
-
-"""
-print("CouYiSe()=",CouYiSe(),"\nLiuDuiBan()=",LiuDuiBan(),"\nQuanDa()=",QuanDa(),"\nQuanXiao()=",QuanXiao(),"\nSanShunZi()=",SanShunZi(),
-      "\nSanTongHua()=",SanTongHua(),"\nSanTongHuaShun()=",SanTongHuaShun(),"\nSanZhaDan()=",SanZhaDan(),"\nShiErHuangZu()=",ShiErHuangZu(),"\nSiTaoSanTiao()=",SiTaoSanTiao(),
-      "\nShuangGuaiChongSan=",ShuangGuaiChongSan(),"\nWuDuiChongSan()=",WuDuiChongSan(),"\nYiTiaoLong()=",YiTiaoLong(),"\nZhiZhunQingLong()=",ZhiZhunQingLong())
-"""
