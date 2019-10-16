@@ -123,17 +123,17 @@ def get_weight( card_list, mode ):
     if ( ret != -1 ):
         return max(full_house[mode][ret[0]-1], full_house[mode][ret[1]-1])
 
-    #wutong
+    #flush
     ret = jdg_flush(nw_cards)
-    #print("wutong:", ret)
+    #print("flush:", ret)
     if ( ret != -1 ):
-        return flush[mode][ret-1]
+        return flush[mode][ret[0][1]-1]
     
     #straight
     ret = jdg_straight(nw_cards)
     #print("starigh:", ret)
     if ( ret[1] != 0 ):
-        return straight[mode][ret[2]-1+sz]
+        return straight[mode][ret[2]-1+len(nw_cards)]
 
     #triple
     ret = jdg_triple(nw_cards)
@@ -175,10 +175,11 @@ def get_weight( card_list, mode ):
 
 # In[8]:
 
+"""
 
 system_cards =  "$4 &7 #8 *3 &8 #10 #K *6 #2 $Q $3 $K *J"
 system_cards = system_cards.split()
-print(system_cards)
+#print(system_cards)
 _cards = []
 for i in system_cards:
     x, y = suit_sa[i[0]], number_sa[i[1:len(i)]]
@@ -195,7 +196,7 @@ print(tp)
 header = [(0, 13), (3, 12), (3, 13)]
 middle = [(2, 8), (0, 10), (1, 6), (3, 3), (1, 11)]
 last = [(3, 4), (2, 7), (0, 8), (1, 3), (0, 2)]
-print(header); print(middle); print(last)
+#print(header); print(middle); print(last)
 
 
 # In[10]:
@@ -207,12 +208,13 @@ print(header); print(middle); print(last)
 # In[8]:
 
 
-print(get_weight(header,0))
-print(get_weight(middle,1))
-print(get_weight(last,2))
+#print(get_weight(header,0))
+#print(get_weight(middle,1))
+#print(get_weight(last,2))
 
 
 # In[ ]:
+"""
 
 
 
