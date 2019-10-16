@@ -1,6 +1,3 @@
-福建13水出牌算法，Algorithm_fight即为出牌算法。  
-福建13水UI链接: https://pan.baidu.com/s/1BKXBdohykmFhDD5POoB0Wg 提取码: riyf  
-因UI的exe过于庞大，故选择使用云端提取。
 ## 徽章
 ![](https://img.shields.io/badge/Python-V3.7-blue)  ![](https://img.shields.io/badge/Coverage-97%25-brightgreen) ![](https://img.shields.io/badge/PyQt5-V5.13.2-yellow) 
 
@@ -14,7 +11,7 @@ Windows10/Win7
 exe可执行文件，无需编译
 
 ## 使用方法
-进入百度云盘页面：https://pan.baidu.com/s/1BKXBdohykmFhDD5POoB0Wg 下载，提取码: riyf  
+进入百度云盘页面：[https://pan.baidu.com/s/1BKXBdohykmFhDD5POoB0Wg](https://pan.baidu.com/s/1BKXBdohykmFhDD5POoB0Wg) 下载，提取码: riyf  
 因使用pyinstaller打包生成的exe文件过大无法上传GitHub，故选择使用百度云上传
 
 ## 持续集成
