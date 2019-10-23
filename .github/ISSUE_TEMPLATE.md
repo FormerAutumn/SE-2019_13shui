@@ -16,8 +16,8 @@
 ~ 待更新
 </br></br></br>
 - 100000 ZQ init.
-- ... 使用日期 19.10.20 作者 zxr 记要 None 
+- 使用日期 19.10.20 作者 zxr 记要 None 
 
 
-参考: [禁止事项清单](https://github.com/GC4WP/common/wiki/HbNotDoIt)
+- 参考: [禁止事项清单](https://github.com/GC4WP/common/wiki/HbNotDoIt)
 
