@@ -11,7 +11,8 @@ Windows10/Win7
 exe可执行文件，无需编译
 
 ## 使用方法
-进入百度云盘页面：[https://pan.baidu.com/s/1ont8Mf5WHFnzY66u8NZxEQ](https://pan.baidu.com/s/1ont8Mf5WHFnzY66u8NZxEQ) 下载，提取码: wtt4  
+进入百度云盘页面：</br>[征战十三水_V2.0](https://pan.baidu.com/s/1ont8Mf5WHFnzY66u8NZxEQ)，提取码: wtt4  
+</br> [征战十三水_V3.0](https://pan.baidu.com/s/1XfFFHrzPM_pIp-GV3N9C7A)，提取码: xas2 </br> 
 因使用pyinstaller打包生成的exe文件过大无法上传GitHub，故选择使用百度云上传
 
 ## 持续集成
